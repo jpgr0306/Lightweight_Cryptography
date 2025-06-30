@@ -6,15 +6,19 @@
 % Charset: ISO8859-1 (latin-1) áéíóúç
 %
 \documentclass{SBCbookchapter}
+\usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[brazil,english]{babel}
-\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{mindmap, shadows, trees}
+\usepackage{float}
+\setlength{\intextsep}{8pt}   % Espaço acima/abaixo de figuras no meio do texto
+\setlength{\textfloatsep}{10pt} % Espaço entre texto e figuras flutuantes
 
-\author{Alexandre Zucki Baciuk, João Pedro Gava Ribeiro and Rodrigo Belniok Czelusniak}
+\author{Alexandre Zucki Baciuk, João Pedro Gava Ribeiro e Rodrigo Belniok Czelusniak}
 \title{Lightweight Cryptography}
-
 \begin{document}
+
 \maketitle
 
 \begin{abstract}
@@ -37,18 +41,43 @@ ambos devem estar na primeira página do artigo.
 \end{otherlanguage}
 \end{resumo}
 
-\section{General Information}
-All submitted paper to some SBC conference, including any supporting
-documents, should be written in English or in Portuguese. The format
-paper should be A4 with single column, 3.5~cm for upper margin, 2.5~cm
-for bottom margin and 3.0~cm for lateral margins, without headers or
-footers. The main font must be Times, 12~point nominal size, with
-6~points of space before each paragraph. Page numbers must be
-suppressed in the final version.
+\section{Introdução}
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page
-texts.
+A Internet das Coisas (ou \textit{Internet of Things} -- IoT, do inglês) é caracterizada por vários dispositivos interconectados que trocam informações entre si \cite{dutta:2019}. Esta consolidou-se como uma área de pesquisa robusta e abundante, a partir do avanço de suas aplicações em múltiplos domínios \cite{thakor:2020}, alguns dos quais foram apresentados na Figura \ref{fig:1}.
+
+Então, para exemplificar, na saúde conectada os sensores de IoT possibilitam um monitoramento contínuo de pacientes e a rápida reação perante anormalidades. Já na casa inteligente, diversos eletrodomésticos, como a iluminação inteligente, simplificam o cotidiano de seus detentores \cite{sembroiz:2018}.
+
+Assim, por mais que o termo tenha sido cunhado em 1999, empresas como a Cisco assumem que o conceito de IoT começou a fazer sentido em 2009, quando a quantidade de dispositivos conectados (10 bilhões) ultrapassou a população global. De certo modo, esta popularização se deve a melhorias aferidas em termos de eficiência, custo de produção e redução de tamanho de sensores \cite{sembroiz:2018}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Domínios de Aplicação da IoT}
+    \label{fig:1}
+    \begin{tikzpicture}[mindmap, grow cyclic, every node/.style=concept, concept color=blue!40, 
+	level 1/.append style={level distance=3.5cm,sibling angle=45}]
+    \node[concept color=blue!40] {Aplicações de IoT}
+    child [concept color=red!60] {node {Cidade Inteligente}}
+    child [concept color=orange!70] {node {Casa Inteligente}}
+    child [concept color=yellow!60!orange] {node {Agricultura Inteligente}}
+    child [concept color=green!50] {node {Rede Inteligente}}
+    child [concept color=cyan!60] {node {Carro Conectado}}
+    child [concept color=violet!60] {node {Saúde Conectada}}
+    child [concept color=magenta!60] {node {Dispositivo Vestível}}
+    child [concept color=brown!60] {node {Indústria 4.0}};
+\end{tikzpicture}
+\end{figure}
+
+Logo, estima-se que em 2024 existiam 18 bilhões de dispositivos conectados na infraestrutura de IoT e projeta-se que existirão 40 bilhões até 2030 \cite{iotanalytics:2024}. Nesse sentido, um incremento crescente no número destes dispositivos impõe preocupações atinentes à segurança \cite{dutta:2019}, as quais podem ser expressas como segue:
+
+\begin{itemize}
+    \item Confidencialidade: apenas usuários autorizados podem acessar a informação.
+    \item Disponibilidade: quando necessário, o dispositivo deve conseguir acessar a informação requerida.
+    \item Integridade: deve-se assegurar que os dados são precisos.
+    \item Autenticação: os elementos da rede possuem níveis de acesso diferente. Este é um aspecto complexo de ser implementado em IoT.
+    \item Heterogeneidade: como os elementos da rede se distinguem em complexidade e fabricante, necessita-se de uma rede heterogênea.
+\end{itemize}
+
+Isto posto, surge a motivação para o desenvolvimento de abordagens de Criptografia Leve (ou \textit{Lightweight Cryptography} -- LWC), objeto de pesquisa do presente artigo, ou seja, os esquemas criptográficos que dependem de uma complexidade computacional e consumo de memória reduzidos. Sendo assim, a LWC é adequada para sistemas restritos em memória e poder computacional, os quais seriam incapazes de processar em tempo hábil os algoritmos criptográficos convencionais \cite{aissaoui:2023}.
 
 \section{First Page}
 The first page must display the paper title, the name and address of
@@ -81,12 +110,6 @@ both margins, as shown in Figure~\ref{figtwo}. The font must be
 Helvetica, 10~point, boldface, with 6~points of space before and after
 each caption.
 
-\begin{figure}[h!]
-	\centerline{\includegraphics{fig1}}
-	\caption{A typical figure}
-	\label{figone}
-\end{figure}
-
 In tables, do not use colored or shaded backgrounds, and avoid thick,
 doubled, or unnecessary framing lines. When reporting empirical data,
 do not use more decimal digits than warranted by their precision and
@@ -98,14 +121,6 @@ caption.
 Figure and table references must be composed by the chapter number and
 a sequence number beginning in one (see the examples of
 Figure~\ref{figone}, Figure~\ref{figtwo} and Table~\ref{tabone}).
-
-\begin{figure}[h!]
-	\centerline{\includegraphics{fig2}}
-	\caption{This figure is an example of a figure caption taking
-		more than one line and justified considering margins
-		mentioned in Section~\ref{sec:captionmargins}}
-	\label{figtwo}
-\end{figure}
 
 \section{Images}
 All images and illustrations should be in black-and-white, or gray
@@ -164,12 +179,6 @@ print, without any visible difference in the result.
 	\end{tabular}
 	\end{footnotesize}
 \end{table}
-
-\section{References}
-Bibliographic references must be unambiguous and uniform.  We
-recommend giving the author names references in brackets,
-e.g. \cite{knuth1986texbook},
-\cite{boulic19913d}, \cite{dyer1995motion}, and \cite{holton1995soft}.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
